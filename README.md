@@ -84,3 +84,28 @@ La doc dispo sur google docs: [Documentation](https://docs.google.com/document/d
 
 ## Installer de Sox sur la machine [Obligatoire]
 
+C:\Program Files\VideoLAN\VLC
+Pour convertir un fichier audio au format MP3 en WAV à l'aide de VLC en ligne de commande, vous pouvez utiliser la commande suivante. Assurez-vous que VLC est installé sur votre système et que le chemin d'accès à VLC est inclus dans votre variable d'environnement PATH.
+
+Commande de conversion
+Voici la commande que vous pouvez utiliser :
+
+vlc -I dummy "chemin/vers/audio.mp3" --sout "#transcode{vcodec=none,acodec=s16l}:standard{access=file,mux=wav,dst='chemin/vers/audio.wav'}" vlc://quit
+Explication des paramètres
+vlc : Lance le lecteur VLC.
+-I dummy : Utilise une interface minimale, ce qui est utile pour les opérations en ligne de commande.
+"chemin/vers/audio.mp3" : Remplacez par le chemin d'accès à votre fichier MP3 à convertir.
+--sout : Spécifie les options de sortie.
+#transcode{vcodec=none,acodec=s16l} : Indique que nous ne souhaitons pas transcoder la vidéo (vcodec=none) et que nous voulons utiliser le codec audio WAV (s16l).
+:standard{access=file,mux=wav,dst='chemin/vers/audio.wav'} : Définit le type d'accès (fichier), le format de multiplexage (wav) et le chemin de destination pour le fichier WAV.
+vlc://quit : Ferme VLC après la conversion.
+Exemple
+Si vous avez un fichier audio.mp3 situé dans le dossier C:\Musique, la commande ressemblera à ceci :
+
+vlc -I dummy "C:\Musique\audio.mp3" --sout "#transcode{vcodec=none,acodec=s16l}:standard{access=file,mux=wav,dst='C:\Musique\audio.wav'}" vlc://quit
+Note
+Assurez-vous d'utiliser des guillemets si le chemin contient des espaces.
+Cette commande fonctionne sur les systèmes Windows. Pour les systèmes Unix (Linux, macOS), vous pourriez avoir besoin d'adapter les chemins et la syntaxe.
+Si vous avez besoin d'aide supplémentaire ou d'autres questions, n'hésitez pas à demander !
+
+##vlc -I dummy "C:\Musique\audio.mp3" --sout "#transcode{vcodec=none,acodec=s16l}:standard{access=file,mux=wav,dst='C:\Musique\audio.wav'}" vlc://quit

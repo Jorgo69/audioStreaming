@@ -17,25 +17,37 @@
         @vite(['resources/css/app.css','resources/js/app.js'])
     </head>
     <body class="font-sans antialiased dark:bg-black dark:text-white/50">
-        <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
-        <form action="{{route('converting')}}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('POST')
-            <label for="audio_file">Choisir un fichier audio :</label>
-            <input type="file" name="audio_file" id="audio_file" required>
-            @error('audio_file')
-                <span class="text-red-400">{{ $messsage }}</span>
-            @enderror
-            <label for="format">Sélectionner le format de sortie :</label>
-            <select name="format" id="format">
-                <option value="mp3">MP3</option>
-                <option value="wav">WAV</option>
-                <option value="flac">FLAC</option>
-                <option value="aac">AAC</option>
-            </select>
-            
-            <button type="submit" class="bg-yellow-200 ">Convertir</button>
-        </form>
+        
+        <div class="py-12">
+            <div class="md:w-full mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900">
+
+                    <form action="{{route('converting')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        @method('POST')
+                        <label for="audio_file">Choisir un fichier audio :</label>
+                        <input type="file" name="audio_file" id="audio_file" required>
+                        @error('audio_file')
+                            <span class="text-red-400">{{ $messsage }}</span>
+                        @enderror
+                        <label for="format">Sélectionner le format de sortie :</label>
+                        <select name="format" id="format">
+                            <option value="mp3">MP3</option>
+                            <option value="wav">WAV</option>
+                            <option value="flac">FLAC</option>
+                            <option value="aac">AAC</option>
+                        </select>
+                        
+                        <x-primary-button x-on:click="$dispatch('close')">
+                            {{ __('Convertir') }}
+                        </x-primary-button>
+                    </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
         
