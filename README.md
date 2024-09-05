@@ -41,7 +41,7 @@ MAIL_DRIVER=smtp
 MAIL_HOST=smtp.googlemail.com
 MAIL_PORT=465
 MAIL_USERNAME=ibralejorgo@gmail.com
-MAIL_PASSWORD=sdusmkiduigfajwx
+MAIL_PASSWORD=*******************
 MAIL_ENCRYPTION=ssl
 MAIL_FROM_ADDRESS=ibralejorgo@gmail.com
 MAIL_FROM_NAME="${APP_NAME}"
@@ -78,4 +78,9 @@ Résumé
 Installation de base : SoX est installé avec des fonctionnalités de base.
 Formats supplémentaires : Vous devrez installer des paquets supplémentaires pour obtenir le support de formats spécifiques comme MP3, OGG, et FLAC.
 Si vous avez besoin d'une fonctionnalité ou d'un format spécifique, n'hésitez pas à le mentionner, et je vous aiderai à trouver les bonnes commandes pour l'installer !
+
+
+La doc dispo sur google docs: [Documentation](https://docs.google.com/document/d/1nXNT0F8BGohvdsJ0GRR0FGu1j87lH_HOMMaVyjkgZsM/edit?usp=sharing)
+
+## Installer de Sox sur la machine [Obligatoire]
 

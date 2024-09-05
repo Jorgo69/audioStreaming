@@ -87,17 +87,37 @@ class AudioConvertionController extends Controller
         ]);
 
         $inputFile = $this->storeAudio($request->file('audio_file'), $request);
-        if (!$inputFile) {
-            return response()->json(['message' => 'Erreur lors du téléchargement du fichier audio.'], 500);
-        }
-        $inputFilePath = storage_path('app/public/' . $inputFile);
-        $outputFormat = $request->input('format');
-        $outputFileName = 'fichier_sortie.' . $outputFormat;
-        $outputFilePath = storage_path('app/public/audios/' . $outputFileName);
+if (!$inputFile) {
+    return response()->json(['message' => 'Erreur lors du téléchargement du fichier audio.'], 500);
+}
 
-        // Commande pour convertir le fichier audio avec LAME
-        $commandLame = "sox \"$inputFilePath\" \"$outputFilePath\" 2>&1";
-        dd(exec($commandLame, $output, $returnVar));
+$inputFilePath = storage_path('app/public/' . $inputFile);
+$outputFormat = $request->input('format');
+$outputFileName = 'fichier_sortie.' . $outputFormat;
+$outputFilePath = storage_path('app/public/audios/' . $outputFileName);
+
+// Vérification des chemins de fichiers
+if (!file_exists($inputFilePath)) {
+    return response()->json(['message' => 'Le fichier d\'entrée n\'existe pas.'], 400);
+}
+
+// Commande pour convertir le fichier audio avec SoX
+$commandLame = "\"C:\\Program Files (x86)\\sox-14-4-2\\sox.exe\" \"$inputFilePath\" -c 2 -C 128 \"$outputFilePath\" 2>&1";
+
+// Exécuter la commande
+exec($commandLame, $output, $returnVar);
+
+// Vérifier le résultat de la commande
+if ($returnVar !== 0) {
+    return response()->json([
+        'message' => 'Erreur lors de la conversion du fichier audio.',
+        'output' => implode("\n", $output), // Afficher la sortie de l'erreur
+    ], 500);
+}
+
+// Si tout s'est bien passé, retourner le chemin du fichier de sortie
+return response()->json(['message' => 'Conversion réussie.', 'output_file' => $outputFilePath], 200);
+
 
 
 

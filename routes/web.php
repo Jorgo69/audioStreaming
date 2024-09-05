@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AudioConversionController;
 use App\Http\Controllers\AudioConvertionController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,10 @@ Route::get('/conversion', function() {
 });
 
 Route::post('/converting', [AudioConvertionController::class, 'convertWithLame'])->name('converting');
+
+// Route::get('/convert-audio', [AudioConversionController::class, 'showConversionForm'])->name('convert.audio.form');
+Route::post('/convert-audio', [AudioConversionController::class, 'convert'])->name('convert.audio');
+
 
 
 
