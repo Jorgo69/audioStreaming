@@ -22,14 +22,28 @@ class AudioConversionController extends Controller
         
         return null;
     }
+    private function originalName($audio, $request)
+    {
+        $audio = $request->file('audio_file');
+
+        if($audio !== null && !$audio->getError()){
+            $audioNamed = Carbon::now()->timestamp . '.' . $request->audio_file->getClientOriginalExtension();
+            return $audioNamed;
+        }
+        
+        return null;
+    }
     
     public function convert(Request $request)
     {
+        
         // Validation du fichier audio
         $request->validate([
             'audio_file' => 'required|file|mimes:mp2,wav,mp3,flac,aac|max:20480',
-            'format' => 'required|in:mp3,wav,flac,aac'
+            'format' => 'required|in:mp3,wav,flac,aac,ogg'
         ]);
+
+        $inputNamed = $this->originalName($request->file('audio_file'), $request);
 
         $inputFile = $this->storeAudio($request->file('audio_file'), $request);
         if (!$inputFile) {
@@ -37,20 +51,27 @@ class AudioConversionController extends Controller
         }
 
         $inputFilePath = storage_path('app/public/' . $inputFile);
+        // dd($inputFile); // entre
         $outputFormat = $request->input('format');
+        $this->storeAudio($request->file, $request); //sortie
         $outputFileName = 'fichier_sortie.' . $outputFormat;
+        // dd($outputFileName);
         $outputFilePath = storage_path('app/public/audios/' . $outputFileName);
+        // dd($outputFilePath);
 
         // Commande pour convertir le fichier audio avec GStreamer
-        $commandGst = "gst-launch-1.0 filesrc location=\"$inputFilePath\" ! decodebin ! audioconvert ! audioresample ! queue ! $outputFormatenc ! filesink location=\"$outputFilePath\" 2>&1";
+        // $commandGst = "gst-launch-1.0 filesrc location=\"$inputFilePath\" ! decodebin ! audioconvert ! audioresample ! queue ! $outputFormat ! filesink location=\"$outputFilePath\" 2>&1";
+        $commandGst = "\"C:\Program Files\VideoLAN\VLC\\vlc.exe\" -I dummy \"$inputFilePath\" --sout #transcode{vcodec=none,acodec=s16l}:standard{access=file,mux=wav,dst='\"$outputFilePath\"'} vlc://quit";
+        // $commandLame = "\"C:\Program Files\VideoLAN\VLC\\vlc.exe\" \"$inputFilePath\" -c 2 -C 128 \"$outputFilePath\" 2>&1";
+        // dd($commandGst);
         exec($commandGst, $output, $returnVar);
 
         // Afficher les erreurs pour le diagnostic
         if ($returnVar !== 0) {
             return response()->json(['message' => 'Erreur lors de la conversion audio.', 'error' => implode("\n", $output)], 500);
         }
-
-        return response()->download($outputFilePath)->deleteFileAfterSend(true);
+        // return back();
+        return response()->download($outputFilePath);
     }
 
 
